@@ -329,13 +329,14 @@ html[data-mode="dark"] .mesh{
 </div>
 
 <div class="player" id="player">
-  <video id="video" playsinline webkit-playsinline controls preload="metadata"></video>
+  <video id="video" playsinline webkit-playsinline controls preload="auto"></video>
   <div class="bar">
     <button id="closePlayer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
-    <div class="t" id="playerTitle">正在播放</div>
+    <div class="t"><div id="playerTitle">正在播放</div><div id="srcLabel" style="font-size:11px;opacity:.6;margin-top:2px"></div></div>
+    <button id="btnSwitchSrc" title="换源"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 8"/><path d="M20 4v4h-4"/><path d="M20 12a8 8 0 0 1-13.7 5.6L4 16"/><path d="M4 20v-4h4"/></svg></button>
     <button id="btnFullscreen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
   </div>
-  <div class="hintbox">演示视频加载失败<br>（网络受限属正常）<br>真实视频请在 App 内播放</div>
+  <div class="hintbox">所有演示源都打不开<br>（网络受限时属正常）<br><span style="color:#fff;text-decoration:underline" id="retrySrc">点这里重试</span></div>
 </div>
 <div class="toast" id="toast"></div>
 
@@ -821,13 +822,12 @@ document.addEventListener('click', e => {
 });
 
 /* ---------------- search ---------------- */
-function openSearch(){
-  const body = $('#searchBody');
-  body.innerHTML = `
+function renderSearchHome(){
+  $('#searchBody').innerHTML = `
     <p class="stitle">搜尋歷史</p>
     <div class="chips">
       <span class="chip" data-kw="雨声里的第三封信">雨声里的第三封信</span>
-      <span class="chip" data-kw="夏日電車">夏日電車</span>
+      <span class="chip" data-kw="夏日">夏日</span>
       <span class="chip" data-kw="Studio Cloud">Studio Cloud</span>
     </div>
     <p class="stitle" style="margin-top:20px">大家都在搜</p>
@@ -835,21 +835,39 @@ function openSearch(){
       <span class="chip hot" data-kw="櫻花"><b>1</b>櫻花色的謊言</span>
       <span class="chip hot" data-kw="圖書館"><b>2</b>深夜圖書館</span>
       <span class="chip hot" data-kw="月下"><b>3</b>月下的約定</span>
-      <span class="chip" data-kw="高幀率"># 高幀率</span>
       <span class="chip" data-kw="中文字幕"># 中文字幕</span>
+      <span class="chip" data-kw="高畫質"># 高畫質</span>
     </div>
     <p class="stitle" style="margin-top:20px">猜你想看</p>
     <div class="grid">${gridHTML(['v1','v2','v5','v8'])}</div>`;
+}
+function runSearch(q){
+  const kw = q.trim().toLowerCase();
+  if (!kw) { renderSearchHome(); return; }
+  const hits = VIDEOS.filter(v =>
+    v.t.toLowerCase().includes(kw) ||
+    v.studio.toLowerCase().includes(kw) ||
+    v.tags.some(t => t.toLowerCase().includes(kw))
+  );
+  $('#searchBody').innerHTML = hits.length
+    ? `<p class="stitle">找到 ${hits.length} 個結果</p><div class="grid">${hits.map(cardHTML).join('')}</div>`
+    : `<div class="empty">沒有找到「${q}」，換個關鍵詞試試</div>`;
+}
+function openSearch(){
+  renderSearchHome();
   $('#searchSheet').classList.add('on');
   setTimeout(() => $('#searchInput').focus(), 120);
 }
 $('#closeSearch').onclick = () => $('#searchSheet').classList.remove('on');
+$('#searchInput').addEventListener('input', e => runSearch(e.target.value));
+$('#searchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); runSearch(e.target.value); e.target.blur(); }
+});
 $('#searchSheet').addEventListener('click', e => {
   const chip = e.target.closest('.chip');
   if (chip){
     $('#searchInput').value = chip.dataset.kw;
-    $('#searchSheet').classList.remove('on');
-    toast('搜尋「' + chip.dataset.kw + '」（示範）');
+    runSearch(chip.dataset.kw);
     return;
   }
   const card = e.target.closest('.card');
@@ -861,40 +879,47 @@ $('#searchSheet').addEventListener('click', e => {
 });
 
 /* ---------------- player ---------------- */
-const VIDEOS_SRC = [
-  'https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8',
-  'https://media.w3.org/2010/05/sintel/trailer.mp4'
+const SOURCES = [
+  {url:'https://www.w3schools.com/html/mov_bbb.mp4', label:'示例源 1 / MP4'},
+  {url:'https://vjs.zencdn.net/v/oceans.mp4', label:'示例源 2 / MP4'},
+  {url:'https://media.w3.org/2010/05/sintel/trailer.mp4', label:'示例源 3 / MP4'},
+  {url:'https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8', label:'示例源 4 / HLS'}
 ];
+let srcIdx = 0;
+function loadSource(i, autoplay){
+  const el = $('#video');
+  srcIdx = ((i % SOURCES.length) + SOURCES.length) % SOURCES.length;
+  $('#srcLabel').textContent = SOURCES[srcIdx].label;
+  $('#player').classList.remove('errored');
+  el.src = SOURCES[srcIdx].url;
+  el.load();
+  if (autoplay !== false) el.play().catch(() => {});
+}
+function nextSource(){
+  if (srcIdx + 1 >= SOURCES.length) {
+    $('#player').classList.add('errored');
+    return;
+  }
+  loadSource(srcIdx + 1);
+}
 function openPlayer(v){
   if (!v) return;
-  const el = $('#video');
   $('#playerTitle').textContent = v.t;
   $('#player').classList.add('on');
-  $('#player').classList.remove('errored');
-  if (!el.dataset.ready){
-    VIDEOS_SRC.forEach((src, i) => {
-      const s = document.createElement('source');
-      s.src = src;
-      s.type = i === 0 ? 'application/x-mpegURL' : 'video/mp4';
-      el.appendChild(s);
-    });
-    el.dataset.ready = '1';
-    el.load();
-  }
-  el.play().catch(() => {});
+  loadSource(0);
 }
 function closePlayer(){ const el = $('#video'); el.pause(); $('#player').classList.remove('on'); }
 $('#closePlayer').onclick = closePlayer;
+$('#btnSwitchSrc').onclick = () => { loadSource(srcIdx + 1); toast('切換到 ' + SOURCES[srcIdx].label); };
+$('#retrySrc').onclick = () => loadSource(0);
 $('#btnFullscreen').onclick = () => {
   const el = $('#video');
   if (el.webkitEnterFullscreen) el.webkitEnterFullscreen();
   else if (el.requestFullscreen) el.requestFullscreen();
 };
-$('#video').addEventListener('error', () => $('#player').classList.add('errored'));
-setTimeout(() => {
-  const el = $('#video');
-  if (el && el.readyState === 0 && $('#player').classList.contains('on')) $('#player').classList.add('errored');
-}, 7000);
+$('#video').addEventListener('error', nextSource);
+$('#video').addEventListener('stalled', () => {});
+$('#video').addEventListener('playing', () => $('#player').classList.remove('errored'));
 
 /* ---------------- misc ---------------- */
 let hi = 0;
@@ -921,6 +946,8 @@ addEventListener('resize', () => {
   render();
   if (p.get('view') === 'detail') { const id = p.get('id') || 'v3'; const v = byId(id); if (v) push({name:'detail', id, title:v.t}); }
   if (p.get('view') === 'settings') push({name:'settings', title:'設定'});
+  if (p.get('q')) { openSearch(); $('#searchInput').value = p.get('q'); runSearch(p.get('q')); }
+  if (p.get('play')) { const v = byId(p.get('play')) || VIDEOS[0]; openPlayer(v); }
   requestAnimationFrame(() => movePill(0));
   setTimeout(() => movePill(0), 200);
 })();
