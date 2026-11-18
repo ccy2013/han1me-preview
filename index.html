@@ -13,9 +13,8 @@
 <title>Han1meNext</title>
 <style>
 :root{
-  --accent-base:#0B7F74; --accent2-base:#6FBFA6;
-  --tb:172;
-  --r-xl:28px; --r-lg:22px; --r-md:16px;
+  --accent-base:#0B7F74; --accent2-base:#6FBFA6; --tb:172;
+  --r-xl:28px; --r-lg:22px; --r-md:16px; --r-sm:12px;
   --ease:cubic-bezier(.22,.61,.36,1);
   --ease-out:cubic-bezier(.16,1,.3,1);
   --pad:clamp(16px,3.2vw,40px);
@@ -32,7 +31,7 @@
   --glass-bg:rgba(255,255,255,.62);
   --glass-brd:rgba(255,255,255,.72);
   --glass-hi:rgba(255,255,255,.95);
-  --glass-shadow:0 18px 40px -18px rgba(28,22,16,.30),0 2px 10px -4px rgba(28,22,16,.12);
+  --glass-shadow:0 18px 40px -18px rgba(28,22,16,.30);
   --scrim:rgba(22,20,18,.34);
   --accent:var(--accent-base); --accent2:var(--accent2-base);
 }
@@ -40,153 +39,117 @@ html[data-mode="dark"]{
   --bg:#0A0B0D; --surface:#15171B; --surface-2:#1D2025;
   --text:#F3F4F6; --text-2:#A5ABB4; --text-3:#6C727B;
   --hairline:rgba(255,255,255,.095);
-  --shadow-card:0 24px 50px -26px rgba(0,0,0,.85),0 2px 10px -4px rgba(0,0,0,.5);
+  --shadow-card:0 24px 50px -26px rgba(0,0,0,.85);
   --glass-bg:rgba(30,33,39,.58);
   --glass-brd:rgba(255,255,255,.14);
   --glass-hi:rgba(255,255,255,.30);
-  --glass-shadow:0 22px 46px -20px rgba(0,0,0,.75),0 1px 0 0 rgba(255,255,255,.06) inset;
+  --glass-shadow:0 22px 46px -20px rgba(0,0,0,.75);
   --scrim:rgba(0,0,0,.56);
   --accent:color-mix(in srgb,var(--accent-base) 78%,white);
   --accent2:color-mix(in srgb,var(--accent2-base) 72%,white);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;overscroll-behavior:none}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Microsoft YaHei UI",system-ui,sans-serif;
-  background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;
-  overflow:hidden;
-}
-#app{position:fixed;inset:0;display:flex;flex-direction:column;background:var(--bg);color:var(--text)}
-
-/* mesh background */
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Microsoft YaHei UI",system-ui,sans-serif;
+  background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow:hidden}
+#app{position:fixed;inset:0;display:flex;flex-direction:column}
 .mesh{position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:
-    radial-gradient(58% 42% at 10% -4%, color-mix(in srgb,var(--accent) 24%,transparent), transparent 72%),
-    radial-gradient(52% 38% at 94% 4%, color-mix(in srgb,var(--accent2) 20%,transparent), transparent 74%),
-    radial-gradient(90% 60% at 50% 108%, color-mix(in srgb,var(--accent) 14%,transparent), transparent 72%);
-  transition:background .45s var(--ease);
-}
+  background:radial-gradient(58% 42% at 10% -4%,color-mix(in srgb,var(--accent) 24%,transparent),transparent 72%),
+    radial-gradient(52% 38% at 94% 4%,color-mix(in srgb,var(--accent2) 20%,transparent),transparent 74%),
+    radial-gradient(90% 60% at 50% 108%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 72%);
+  transition:background .45s var(--ease)}
 html[data-mode="dark"] .mesh{
-  background:
-    radial-gradient(58% 42% at 10% -4%, color-mix(in srgb,var(--accent) 32%,transparent), transparent 72%),
-    radial-gradient(52% 38% at 94% 4%, color-mix(in srgb,var(--accent2) 24%,transparent), transparent 74%),
-    radial-gradient(90% 60% at 50% 108%, color-mix(in srgb,var(--accent) 20%,transparent), transparent 72%);
-}
-
-/* glass */
-.glass{
-  position:relative;background:var(--glass-bg);
+  background:radial-gradient(58% 42% at 10% -4%,color-mix(in srgb,var(--accent) 32%,transparent),transparent 72%),
+    radial-gradient(52% 38% at 94% 4%,color-mix(in srgb,var(--accent2) 24%,transparent),transparent 74%),
+    radial-gradient(90% 60% at 50% 108%,color-mix(in srgb,var(--accent) 20%,transparent),transparent 72%)}
+.glass{position:relative;background:var(--glass-bg);
   -webkit-backdrop-filter:blur(30px) saturate(190%) brightness(1.04);
   backdrop-filter:blur(30px) saturate(190%) brightness(1.04);
-  border:.5px solid var(--glass-brd);
-  box-shadow:var(--glass-shadow);isolation:isolate;
-}
+  border:.5px solid var(--glass-brd);box-shadow:var(--glass-shadow);isolation:isolate}
 .glass::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
   background:radial-gradient(120% 80% at 12% -20%,var(--glass-hi),transparent 58%),
-             linear-gradient(180deg,rgba(255,255,255,.20),transparent 34%);
-  opacity:.9;mix-blend-mode:screen}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .glass{background:var(--surface)}
-}
+    linear-gradient(180deg,rgba(255,255,255,.20),transparent 34%);opacity:.9;mix-blend-mode:screen}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.glass{background:var(--surface)}}
 
 /* top bar */
-.topbar{
-  position:relative;z-index:40;flex:0 0 auto;
-  margin:calc(var(--safe-t) + 8px) calc(var(--pad) + var(--safe-r)) 0 calc(var(--pad) + var(--safe-l));
-  height:56px;border-radius:28px;display:flex;align-items:center;gap:8px;padding:0 8px;
-}
+.topbar{position:relative;z-index:40;flex:0 0 auto;margin:calc(var(--safe-t) + 8px) calc(var(--pad) + var(--safe-r)) 0 calc(var(--pad) + var(--safe-l));
+  min-height:56px;border-radius:28px;display:flex;align-items:center;gap:8px;padding:8px}
 .brand{width:40px;height:40px;border-radius:13px;flex:0 0 auto;display:grid;place-items:center;
-  background:linear-gradient(140deg,var(--accent),var(--accent2));color:#fff;
-  font-weight:900;font-size:19px;box-shadow:0 8px 18px -8px color-mix(in srgb,var(--accent) 80%,transparent)}
+  background:linear-gradient(140deg,var(--accent),var(--accent2));color:#fff;font-weight:900;font-size:19px}
 .searchfield{flex:1 1 auto;min-width:0;height:42px;border-radius:21px;display:flex;align-items:center;gap:9px;
-  padding:0 14px;background:color-mix(in srgb,var(--text) 6%,transparent);
-  border:.5px solid color-mix(in srgb,var(--text) 5%,transparent);cursor:text}
+  padding:0 14px;background:color-mix(in srgb,var(--text) 6%,transparent);border:.5px solid color-mix(in srgb,var(--text) 5%,transparent);cursor:text}
 .searchfield svg{width:17px;height:17px;flex:0 0 auto;color:var(--text-3)}
 .searchfield .hint{flex:1;min-width:0;position:relative;height:20px;overflow:hidden}
-.searchfield .hint span{position:absolute;left:0;top:0;font-size:15px;color:var(--text-3);
-  white-space:nowrap;opacity:0;transform:translateY(8px);transition:.45s var(--ease-out)}
+.searchfield .hint span{position:absolute;left:0;top:0;font-size:15px;color:var(--text-3);white-space:nowrap;
+  opacity:0;transform:translateY(8px);transition:.45s var(--ease-out)}
 .searchfield .hint span.on{opacity:1;transform:none}
-.iconbtn{flex:0 0 auto;width:40px;height:40px;border-radius:50%;border:0;background:transparent;
-  color:var(--text);display:grid;place-items:center;cursor:pointer;transition:background .2s}
+.iconbtn{flex:0 0 auto;width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:var(--text);
+  display:grid;place-items:center;cursor:pointer}
 .iconbtn:active{background:color-mix(in srgb,var(--text) 9%,transparent)}
 .iconbtn svg{width:20px;height:20px}
+.tbtitle{flex:1;min-width:0;font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:4px}
 
-/* pages */
+/* main / views */
 #main{position:relative;z-index:10;flex:1 1 auto;overflow-y:auto;overflow-x:hidden;
   -webkit-overflow-scrolling:touch;scrollbar-width:none}
 #main::-webkit-scrollbar{display:none}
-.page{display:none;padding:18px 0 calc(104px + var(--safe-b))}
-.page.active{display:block;animation:pin .34s var(--ease-out)}
-@keyframes pin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.page{padding:18px 0 calc(104px + var(--safe-b))}
+.page.nopad{padding-bottom:calc(24px + var(--safe-b))}
 .content{max-width:1180px;margin:0 auto;padding:0 calc(var(--pad) + var(--safe-l)) 0 calc(var(--pad) + var(--safe-r))}
+@keyframes pin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.page{animation:pin .3s var(--ease-out)}
 
 /* hero */
 .hero{position:relative;border-radius:var(--r-xl);overflow:hidden;height:clamp(220px,32vh,360px);
-  box-shadow:var(--shadow-card);cursor:pointer;transition:transform .4s var(--ease-out)}
-.hero:active{transform:scale(.995)}
-.hero .scrim{position:absolute;inset:0;
-  background:linear-gradient(180deg,transparent 32%,rgba(6,6,10,.66) 76%,rgba(6,6,10,.86) 100%)}
+  box-shadow:var(--shadow-card);cursor:pointer}
+.hero .scrim{position:absolute;inset:0;background:linear-gradient(180deg,transparent 32%,rgba(6,6,10,.66) 76%,rgba(6,6,10,.86))}
 .hero .meta{position:absolute;left:24px;right:24px;bottom:22px;color:#fff}
-.hero .badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;
-  letter-spacing:.8px;padding:5px 11px;border-radius:99px;margin-bottom:10px;
-  background:rgba(255,255,255,.18);border:.5px solid rgba(255,255,255,.34);
-  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.hero .badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.8px;
+  padding:5px 11px;border-radius:99px;margin-bottom:10px;background:rgba(255,255,255,.18);
+  border:.5px solid rgba(255,255,255,.34);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .hero h2{margin:0;font-size:clamp(22px,2.4vw,34px);font-weight:800;letter-spacing:-.4px;
   text-shadow:0 2px 18px rgba(0,0,0,.45);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hero .sub{margin-top:7px;font-size:13.5px;color:rgba(255,255,255,.84);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .hero .playbig{position:absolute;right:22px;bottom:22px;width:52px;height:52px;border-radius:50%;
-  display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.2);
-  border:.5px solid rgba(255,255,255,.5);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+  display:grid;place-items:center;color:#fff;background:rgba(255,255,255,.2);border:.5px solid rgba(255,255,255,.5);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 
-/* poster art */
-.poster{position:absolute;inset:0;overflow:hidden;
-  background:radial-gradient(125% 105% at 24% -6%,#262d3a 0%,#141821 48%,#0b0e13 100%)}
+/* poster */
+.poster{position:absolute;inset:0;overflow:hidden;background:radial-gradient(125% 105% at 24% -6%,#262d3a,#141821 48%,#0b0e13)}
 .poster i{position:absolute;border-radius:50%;filter:blur(44px)}
 .poster .a{width:88%;aspect-ratio:1;left:-24%;top:-28%;opacity:.66;
-  background:radial-gradient(circle at 46% 46%,
-    hsl(calc(var(--tb) + var(--o)) 72% 62%),hsl(calc(var(--tb) + var(--o)) 62% 38%) 56%,transparent 71%)}
+  background:radial-gradient(circle at 46% 46%,hsl(calc(var(--tb) + var(--o)) 72% 62%),hsl(calc(var(--tb) + var(--o)) 62% 38%) 56%,transparent 71%)}
 .poster .b{width:76%;aspect-ratio:1;right:-22%;bottom:-32%;opacity:.56;
-  background:radial-gradient(circle at 54% 54%,
-    hsl(calc(var(--tb) + var(--o2)) 76% 60%),hsl(calc(var(--tb) + var(--o2)) 64% 34%) 58%,transparent 73%)}
-.poster .c{position:absolute;inset:0;
-  background:linear-gradient(116deg,rgba(255,255,255,.20),rgba(255,255,255,.04) 26%,transparent 52%,rgba(255,255,255,.06))}
-.poster .v{position:absolute;inset:0;
-  background:radial-gradient(82% 74% at 50% 44%,transparent 26%,rgba(0,0,0,.46) 100%)}
+  background:radial-gradient(circle at 54% 54%,hsl(calc(var(--tb) + var(--o2)) 76% 60%),hsl(calc(var(--tb) + var(--o2)) 64% 34%) 58%,transparent 73%)}
+.poster .c{position:absolute;inset:0;background:linear-gradient(116deg,rgba(255,255,255,.2),rgba(255,255,255,.04) 26%,transparent 52%,rgba(255,255,255,.06))}
+.poster .v{position:absolute;inset:0;background:radial-gradient(82% 74% at 50% 44%,transparent 26%,rgba(0,0,0,.46))}
 
-/* notice */
+/* notice / sections */
 .notice{display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px 15px;border-radius:var(--r-md);
-  background:color-mix(in srgb,var(--accent) 10%,var(--surface));
-  border:.5px solid color-mix(in srgb,var(--accent) 18%,transparent)}
-.notice .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
-  background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent);flex:0 0 auto}
+  background:color-mix(in srgb,var(--accent) 10%,var(--surface));border:.5px solid color-mix(in srgb,var(--accent) 18%,transparent);cursor:pointer}
+.notice .ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:0 0 auto;
+  background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent)}
 .notice .ic svg{width:16px;height:16px}
 .notice b{font-size:14px}
 .notice p{margin:2px 0 0;font-size:12px;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
-/* section */
 .sec{margin-top:26px}
 .sec-head{display:flex;align-items:center;gap:9px;margin-bottom:13px}
-.sec-head .bar{width:3.5px;height:16px;border-radius:99px;background:var(--accent);
-  box-shadow:0 0 12px color-mix(in srgb,var(--accent) 60%,transparent)}
+.sec-head .bar{width:3.5px;height:16px;border-radius:99px;background:var(--accent)}
 .sec-head h3{margin:0;font-size:18px;font-weight:800;letter-spacing:-.3px}
 .sec-head .sp{flex:1}
 .more{border:0;cursor:pointer;font-size:12.5px;font-weight:700;color:var(--accent);
-  background:color-mix(in srgb,var(--accent) 12%,transparent);padding:7px 12px;border-radius:99px;
-  display:flex;align-items:center;gap:4px}
+  background:color-mix(in srgb,var(--accent) 12%,transparent);padding:7px 12px;border-radius:99px;display:flex;align-items:center;gap:4px}
 .more svg{width:12px;height:12px}
 
-/* grid: auto-fits, so rotating the iPad just reflows */
+/* grid */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px 14px}
 @media (max-width:520px){.grid{grid-template-columns:repeat(2,1fr)}}
-
 .card{cursor:pointer}
-.card .thumb{position:relative;border-radius:var(--r-md);overflow:hidden;aspect-ratio:16/10;
-  background:var(--surface-2);box-shadow:0 14px 30px -20px rgba(20,16,12,.7)}
-.card .thumb::after{content:"";position:absolute;inset:0;border-radius:inherit;
-  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22)}
-.card .pill{position:absolute;right:8px;bottom:8px;display:flex;align-items:center;gap:4px;
-  font-size:10px;font-weight:700;color:#fff;padding:3px 7px;border-radius:99px;
-  background:rgba(10,10,12,.42);border:.5px solid rgba(255,255,255,.3);
+.card .thumb{position:relative;border-radius:var(--r-md);overflow:hidden;aspect-ratio:16/10;background:var(--surface-2);
+  box-shadow:0 14px 30px -20px rgba(20,16,12,.7)}
+.card .thumb::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.22)}
+.card .pill{position:absolute;right:8px;bottom:8px;display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;
+  color:#fff;padding:3px 7px;border-radius:99px;background:rgba(10,10,12,.42);border:.5px solid rgba(255,255,255,.3);
   -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .card .pill svg{width:9px;height:9px}
 .card h4{margin:9px 1px 0;font-size:14px;font-weight:600;line-height:1.36;
@@ -194,9 +157,32 @@ html[data-mode="dark"] .mesh{
 .card .m{margin:5px 1px 0;font-size:12px;color:var(--text-3);display:flex;gap:7px;align-items:center}
 .dotsep{width:3px;height:3px;border-radius:50%;background:currentColor;opacity:.5}
 
+/* detail */
+.detail-hero{position:relative;border-radius:var(--r-lg);overflow:hidden;
+  height:clamp(220px,42vh,420px);width:100%;box-shadow:var(--shadow-card)}
+.detail-hero .scrim{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(6,6,10,.72))}
+.detail-hero .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:64px;height:64px;
+  border-radius:50%;display:grid;place-items:center;color:#fff;background:rgba(0,0,0,.42);
+  border:.5px solid rgba(255,255,255,.5);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);cursor:pointer}
+.detail-hero .play svg{width:24px;height:24px;margin-left:3px}
+.dtitle{margin:16px 0 0;font-size:clamp(20px,2.1vw,26px);font-weight:800;letter-spacing:-.4px;line-height:1.3}
+.dmeta{margin-top:8px;font-size:13px;color:var(--text-2);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.act{flex:1;min-width:78px;border:0;cursor:pointer;background:var(--surface);border-radius:var(--r-sm);
+  padding:11px 8px;display:flex;flex-direction:column;align-items:center;gap:5px;
+  font-size:11.5px;font-weight:600;color:var(--text-2);box-shadow:var(--shadow-card)}
+.act svg{width:19px;height:19px}
+.act.on{color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--surface))}
+.act.primary{background:linear-gradient(150deg,var(--accent),color-mix(in srgb,var(--accent) 70%,var(--accent2)));
+  color:#fff;box-shadow:0 14px 28px -14px color-mix(in srgb,var(--accent) 85%,transparent)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{padding:6px 12px;border-radius:99px;font-size:12px;font-weight:600;cursor:pointer;
+  background:color-mix(in srgb,var(--text) 6%,transparent);color:var(--text-2)}
+.desc{margin-top:16px;font-size:13.5px;line-height:1.75;color:var(--text-2);
+  background:var(--surface);border-radius:var(--r-md);padding:14px 16px;border:.5px solid var(--hairline)}
+
 /* list rows */
-.group{background:var(--surface);border-radius:var(--r-lg);border:.5px solid var(--hairline);
-  box-shadow:var(--shadow-card);overflow:hidden}
+.group{background:var(--surface);border-radius:var(--r-lg);border:.5px solid var(--hairline);box-shadow:var(--shadow-card);overflow:hidden}
 .row{display:flex;align-items:center;gap:14px;padding:14px 16px;cursor:pointer;position:relative}
 .row+.row::before{content:"";position:absolute;left:64px;right:0;top:0;height:.5px;background:var(--hairline)}
 .row:active{background:color-mix(in srgb,var(--text) 4%,transparent)}
@@ -206,52 +192,42 @@ html[data-mode="dark"] .mesh{
 .row .tx{flex:1;min-width:0}
 .row .tx .t{font-size:15px;font-weight:600}
 .row .tx .d{font-size:12px;color:var(--text-3);margin-top:2px}
-.row .val{font-size:13.5px;color:var(--accent);font-weight:600;max-width:44%;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .val{font-size:13.5px;color:var(--accent);font-weight:600;max-width:44%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .row .chev{color:var(--text-3);flex:0 0 auto}
 .row .chev svg{width:15px;height:15px}
 .group-title{display:flex;align-items:center;gap:8px;margin:24px 0 10px}
 .group-title .bar{width:3.5px;height:15px;border-radius:99px;background:var(--accent)}
 .group-title h3{margin:0;font-size:16px;font-weight:800}
-
-/* profile */
 .profile{display:flex;align-items:center;gap:16px}
 .profile .av{width:68px;height:68px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;
   background:linear-gradient(145deg,var(--accent),var(--accent2));color:#fff;font-size:26px;font-weight:800;
-  box-shadow:0 14px 30px -14px color-mix(in srgb,var(--accent) 80%,transparent);
   border:1.5px solid rgba(255,255,255,.5)}
-.profile .info h2{margin:0;font-size:22px;font-weight:800;letter-spacing:-.4px}
+.profile .info h2{margin:0;font-size:22px;font-weight:800}
 .profile .info .sub{font-size:12.5px;color:var(--text-3);margin-top:4px}
+.empty{text-align:center;color:var(--text-3);font-size:13.5px;padding:50px 0}
 
 /* tab bar */
-.tabbar{
-  position:fixed;z-index:50;left:50%;transform:translateX(-50%);
-  bottom:calc(var(--safe-b) + 10px);
+.tabbar{position:fixed;z-index:50;left:50%;transform:translateX(-50%);bottom:calc(var(--safe-b) + 10px);
   height:64px;border-radius:32px;display:flex;align-items:center;gap:2px;padding:6px;
-  width:min(420px,calc(100vw - 40px));
-}
-.tab{position:relative;z-index:2;flex:1;border:0;background:transparent;cursor:pointer;height:52px;
-  border-radius:26px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  width:min(420px,calc(100vw - 40px));transition:transform .34s var(--ease-out),opacity .3s}
+.tabbar.hidden{transform:translateX(-50%) translateY(140%);opacity:0;pointer-events:none}
+.tab{position:relative;z-index:2;flex:1;border:0;background:transparent;cursor:pointer;height:52px;border-radius:26px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   color:var(--text-2);font-size:10.5px;font-weight:600;transition:color .28s}
-.tab svg{width:22px;height:22px;transition:transform .4s var(--ease-out)}
+.tab svg{width:22px;height:22px}
 .tab.active{color:#fff}
-.tab.active svg{transform:scale(1.06)}
 .tabpill{position:absolute;z-index:1;top:6px;height:52px;border-radius:26px;
   background:linear-gradient(150deg,color-mix(in srgb,var(--accent) 92%,white 12%),var(--accent) 62%);
-  box-shadow:0 12px 26px -12px color-mix(in srgb,var(--accent) 78%,transparent),
-             inset 0 1px 0 rgba(255,255,255,.42);
+  box-shadow:0 12px 26px -12px color-mix(in srgb,var(--accent) 78%,transparent),inset 0 1px 0 rgba(255,255,255,.42);
   transition:left .44s var(--ease-out),width .44s var(--ease-out)}
 
 /* sheets */
 .scrim{position:fixed;inset:0;z-index:60;background:var(--scrim);opacity:0;pointer-events:none;
   transition:opacity .3s var(--ease);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 .scrim.on{opacity:1;pointer-events:auto}
-.sheet{position:fixed;z-index:70;left:0;right:0;bottom:0;
-  background:var(--surface);border-radius:26px 26px 0 0;
-  box-shadow:0 -20px 60px -20px rgba(0,0,0,.5);
-  transform:translateY(102%);transition:transform .4s var(--ease-out);
-  max-height:82vh;display:flex;flex-direction:column;
-  padding-bottom:calc(12px + var(--safe-b))}
+.sheet{position:fixed;z-index:70;left:0;right:0;bottom:0;background:var(--surface);border-radius:26px 26px 0 0;
+  box-shadow:0 -20px 60px -20px rgba(0,0,0,.5);transform:translateY(102%);transition:transform .4s var(--ease-out);
+  max-height:82vh;display:flex;flex-direction:column;padding-bottom:calc(12px + var(--safe-b))}
 .sheet.on{transform:none}
 .sheet .handle{width:38px;height:4px;border-radius:99px;background:var(--hairline);margin:10px auto 4px}
 .sheet h3{margin:10px 20px 14px;font-size:20px;font-weight:800}
@@ -260,16 +236,14 @@ html[data-mode="dark"] .mesh{
 .th-item{display:flex;align-items:center;gap:14px;padding:13px 15px;border-radius:16px;cursor:pointer;
   border:.5px solid transparent;margin-bottom:7px;background:var(--surface-2)}
 .th-item:active{background:color-mix(in srgb,var(--accent) 10%,var(--surface-2))}
-.th-item .dot{width:26px;height:26px;border-radius:9px;flex:0 0 auto;background:var(--c);
-  box-shadow:inset 0 0 0 .5px rgba(255,255,255,.45)}
+.th-item .dot{width:26px;height:26px;border-radius:9px;flex:0 0 auto;background:var(--c);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.45)}
 .th-item .nm{flex:1;font-size:15px;font-weight:600}
 .th-item .ck{color:var(--accent);opacity:0}
 .th-item.on .ck{opacity:1}
 .th-item .ck svg{width:18px;height:18px}
 .th-item.on{border-color:color-mix(in srgb,var(--accent) 35%,transparent)}
 .sheet-actions{display:flex;justify-content:center;padding:6px 0 0;border-top:.5px solid var(--hairline);margin-top:4px}
-.sheet-actions button{border:0;background:transparent;color:var(--accent);font-size:15px;font-weight:700;
-  padding:14px 20px;cursor:pointer}
+.sheet-actions button{border:0;background:transparent;color:var(--accent);font-size:15px;font-weight:700;padding:14px 20px;cursor:pointer}
 
 /* search overlay */
 .searchsheet{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;
@@ -279,8 +253,8 @@ html[data-mode="dark"] .mesh{
   padding:calc(var(--safe-t) + 12px) calc(var(--pad) + var(--safe-r)) 0 calc(var(--pad) + var(--safe-l))}
 .searchsheet.on{opacity:1;pointer-events:auto}
 .searchsheet .top{display:flex;gap:10px;align-items:center}
-.searchsheet input{flex:1;height:48px;border-radius:24px;border:.5px solid var(--hairline);
-  background:var(--surface);padding:0 18px;font-size:16px;color:var(--text);outline:none;font-family:inherit}
+.searchsheet input{flex:1;height:48px;border-radius:24px;border:.5px solid var(--hairline);background:var(--surface);
+  padding:0 18px;font-size:16px;color:var(--text);outline:none;font-family:inherit}
 .searchsheet .cancel{border:0;background:transparent;color:var(--accent);font-size:15px;font-weight:600;padding:8px 2px}
 .searchsheet .body{flex:1;overflow-y:auto;padding:22px 0 40px}
 .stitle{font-size:13px;font-weight:800;color:var(--text-3);letter-spacing:.5px;margin:0 0 10px}
@@ -290,331 +264,155 @@ html[data-mode="dark"] .mesh{
 .chip.hot{background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent)}
 .chip.hot b{opacity:.5;margin-right:5px;font-size:11px}
 
-/* video player */
+/* player */
 .player{position:fixed;inset:0;z-index:90;background:#000;display:none}
 .player.on{display:block}
 .player video{position:absolute;inset:0;width:100%;height:100%;background:#000;object-fit:contain}
 .player .bar{position:absolute;left:0;right:0;top:0;padding:calc(var(--safe-t) + 10px) 14px 26px;
-  display:flex;align-items:center;gap:12px;color:#fff;
-  background:linear-gradient(180deg,rgba(0,0,0,.62),transparent)}
+  display:flex;align-items:center;gap:12px;color:#fff;background:linear-gradient(180deg,rgba(0,0,0,.62),transparent)}
 .player .bar .t{flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.player .bar button{border:0;background:rgba(255,255,255,.14);color:#fff;width:38px;height:38px;
-  border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
+.player .bar button{border:0;background:rgba(255,255,255,.14);color:#fff;width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
 .player .bar button svg{width:18px;height:18px}
 .player .hintbox{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;
-  color:rgba(255,255,255,.72);font-size:13px;line-height:1.7;display:none;max-width:80%}
+  color:rgba(255,255,255,.72);font-size:13px;line-height:1.8;display:none;max-width:82%}
 .player.errored .hintbox{display:block}
-
+.toast{position:fixed;left:50%;bottom:calc(var(--safe-b) + 92px);transform:translate(-50%,14px);z-index:100;
+  background:rgba(20,20,24,.9);color:#fff;font-size:13px;padding:10px 18px;border-radius:99px;
+  opacity:0;pointer-events:none;transition:.28s var(--ease-out)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){*{transition-duration:.001s!important;animation-duration:.001s!important}}
 </style>
 </head>
 <body>
 <div id="app">
   <div class="mesh"></div>
-
-  <header class="topbar glass">
-    <div class="brand">H</div>
-    <div class="searchfield" id="openSearch">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
-      <div class="hint" id="hint">
-        <span class="on">搜索影片、标签或作者</span>
-        <span>脸红的关键词是什么？</span>
-        <span>探索深处的秘密…</span>
-        <span>别害羞，大方搜搜看</span>
-      </div>
-    </div>
-    <button class="iconbtn" id="btnTheme" aria-label="主题">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><circle cx="9.2" cy="9.8" r="1.15" fill="currentColor" stroke="none"/><circle cx="14.8" cy="9.8" r="1.15" fill="currentColor" stroke="none"/><circle cx="9.2" cy="14.6" r="1.15" fill="currentColor" stroke="none"/><circle cx="14.8" cy="14.6" r="1.15" fill="currentColor" stroke="none"/></svg>
-    </button>
-    <button class="iconbtn" id="btnSettings" aria-label="设置">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
-    </button>
-  </header>
-
-  <main id="main">
-    <!-- HOME -->
-    <section class="page active" data-page="home">
-      <div class="content">
-        <div class="hero" id="hero">
-          <div class="poster" style="--o:10;--o2:-40"><i class="a"></i><i class="b"></i><div class="c"></div><div class="v"></div></div>
-          <div class="scrim"></div>
-          <div class="meta">
-            <span class="badge">本周精选</span>
-            <h2 id="heroTitle">雨声里的第三封信</h2>
-            <div class="sub">
-              <span id="heroStudio">Studio Cloud</span><span class="dotsep"></span>
-              <span id="heroViews">23.3 万次观看</span><span class="dotsep"></span>
-              <span id="heroTime">2 个月前</span>
-            </div>
-          </div>
-          <div class="playbig">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>
-          </div>
-        </div>
-
-        <div class="notice">
-          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 6-2 7-2 7h16s-2-1-2-7"/><path d="M10.5 20a2 2 0 0 0 3 0"/></svg></span>
-          <div style="flex:1;min-width:0">
-            <b>公告列表</b>
-            <p>Han1meNext 2.0 · 全新 iPadOS 液态玻璃界面已上线</p>
-          </div>
-        </div>
-
-        <div class="sec">
-          <div class="sec-head"><span class="bar"></span><h3>最新里番</h3><span class="sp"></span>
-            <button class="more">更多 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></button>
-          </div>
-          <div class="grid" id="grid1"></div>
-        </div>
-
-        <div class="sec">
-          <div class="sec-head"><span class="bar"></span><h3>最新上市</h3><span class="sp"></span>
-            <button class="more">更多 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></button>
-          </div>
-          <div class="grid" id="grid2"></div>
-        </div>
-
-        <div class="sec">
-          <div class="sec-head"><span class="bar"></span><h3>最新上传</h3><span class="sp"></span>
-            <button class="more">更多 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></button>
-          </div>
-          <div class="grid" id="grid3"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FOLLOWING -->
-    <section class="page" data-page="following">
-      <div class="content">
-        <div class="group-title"><span class="bar"></span><h3>关注</h3></div>
-        <div class="group">
-          <div class="row"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 6-2 7-2 7h16s-2-1-2-7"/><path d="M10.5 20a2 2 0 0 0 3 0"/></svg></span>
-            <div class="tx"><div class="t">追番提醒</div><div class="d">3 个社团 · 本周 2 部更新</div></div>
-            <span class="val">3</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-          <div class="row"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 5h16v11H8l-4 4z"/></svg></span>
-            <div class="tx"><div class="t">订阅动态</div><div class="d">关注的作者有新作时出现在这里</div></div>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-          <div class="row"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3.5 14.6 9l6 .9-4.3 4.2 1 6-5.3-2.8L6.7 20l1-6L3.4 9.9l6-.9z"/></svg></span>
-            <div class="tx"><div class="t">本周热榜</div><div class="d">按播放与收藏计算的热度排行</div></div>
-            <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-        </div>
-        <div class="group-title"><span class="bar"></span><h3>最近更新</h3></div>
-        <div class="grid" id="grid4"></div>
-      </div>
-    </section>
-
-    <!-- MINE -->
-    <section class="page" data-page="mine">
-      <div class="content">
-        <div class="profile">
-          <div class="av">羽</div>
-          <div class="info" style="flex:1">
-            <h2>羽</h2>
-            <div class="sub">已陪伴 128 天 · 稍后观看 36</div>
-          </div>
-          <button class="more">编辑资料</button>
-        </div>
-
-        <div class="group-title"><span class="bar"></span><h3>我的清单</h3></div>
-        <div class="group">
-          <div class="row"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
-            <div class="tx"><div class="t">稍后观看</div></div><span class="val">36</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-          <div class="row"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20s-7.5-4.6-7.5-9.6A4.4 4.4 0 0 1 12 7a4.4 4.4 0 0 1 7.5 3.4C19.5 15.4 12 20 12 20z"/></svg></span>
-            <div class="tx"><div class="t">喜欢的影片</div></div><span class="val">128</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-          <div class="row"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h11M4 12h11M4 17h7"/><path d="m18 9 3 3-3 3"/></svg></span>
-            <div class="tx"><div class="t">播放清单</div><div class="d">自建的 3 个合集</div></div><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-        </div>
-
-        <div class="group-title"><span class="bar"></span><h3>影片</h3></div>
-        <div class="group">
-          <div class="row"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 8v5l3 2"/><circle cx="12" cy="12" r="8.5"/></svg></span>
-            <div class="tx"><div class="t">观看历史</div></div><span class="val">共 214 条</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-          <div class="row"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v9"/><path d="m8.5 9.5 3.5 3.5 3.5-3.5"/><path d="M5 17v2.5h14V17"/></svg></span>
-            <div class="tx"><div class="t">下载</div><div class="d">离线缓存 · 已用 1.2 GB</div></div><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-          <div class="row" id="rowSettings2"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></span>
-            <div class="tx"><div class="t">设置</div><div class="d">主题色、播放、网络</div></div><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SETTINGS -->
-    <section class="page" data-page="settings">
-      <div class="content">
-        <div class="group-title"><span class="bar"></span><h3>主题</h3></div>
-        <div class="group">
-          <div class="row" id="rowMode"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 13.5A8.5 8.5 0 0 1 10.5 4a8.5 8.5 0 1 0 9.5 9.5z"/></svg></span>
-            <div class="tx"><div class="t">深色主题</div></div><span class="val" id="valMode">浅色</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-          <div class="row" id="rowTheme"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><circle cx="9.2" cy="9.8" r="1.15" fill="currentColor" stroke="none"/><circle cx="14.8" cy="9.8" r="1.15" fill="currentColor" stroke="none"/><circle cx="9.2" cy="14.6" r="1.15" fill="currentColor" stroke="none"/></svg></span>
-            <div class="tx"><div class="t">主题色</div><div class="d">十套配色，和安卓版一一对应</div></div><span class="val" id="valTheme">初音蓝（绿）</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-        </div>
-
-        <div class="group-title"><span class="bar"></span><h3>播放</h3></div>
-        <div class="group">
-          <div class="row"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="18" height="12" rx="3"/><path d="m10 9.5 4.5 2.5-4.5 2.5z" fill="currentColor" stroke="none"/></svg></span>
-            <div class="tx"><div class="t">默认画质</div></div><span class="val">1080P</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-          <div class="row"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="13" rx="2.5"/><path d="M9 21h6"/></svg></span>
-            <div class="tx"><div class="t">画中画</div></div><span class="val">开启</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-        </div>
-
-        <div class="group-title"><span class="bar"></span><h3>网络</h3></div>
-        <div class="group">
-          <div class="row"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.6 2.5 14.4 0 17"/></svg></span>
-            <div class="tx"><div class="t">网络设置</div><div class="d">走系统代理，App 不内置</div></div><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-        </div>
-
-        <div class="group-title"><span class="bar"></span><h3>关于</h3></div>
-        <div class="group">
-          <div class="row"><span class="ric"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5"/><circle cx="12" cy="7.8" r="1" fill="currentColor" stroke="none"/></svg></span>
-            <div class="tx"><div class="t">关于</div><div class="d">Han1meNext · 网页预览版</div></div><span class="val">2.0.24</span><span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg></span></div>
-        </div>
-      </div>
-    </section>
-  </main>
-
+  <header class="topbar glass" id="topbar"></header>
+  <main id="main"><div id="view"></div></main>
   <nav class="tabbar glass" id="tabbar">
     <div class="tabpill" id="tabpill"></div>
     <button class="tab active" data-tab="home">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>
-      <span>首页</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg><span>首页</span>
     </button>
     <button class="tab" data-tab="following">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 20s-7.5-4.6-7.5-9.6A4.4 4.4 0 0 1 12 7a4.4 4.4 0 0 1 7.5 3.4C19.5 15.4 12 20 12 20z"/></svg>
-      <span>关注</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 20s-7.5-4.6-7.5-9.6A4.4 4.4 0 0 1 12 7a4.4 4.4 0 0 1 7.5 3.4C19.5 15.4 12 20 12 20z"/></svg><span>关注</span>
     </button>
     <button class="tab" data-tab="mine">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-6.2 7-6.2s7 2.6 7 6.2"/></svg>
-      <span>我的</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-6.2 7-6.2s7 2.6 7 6.2"/></svg><span>我的</span>
     </button>
   </nav>
 </div>
 
-<!-- search -->
 <div class="searchsheet" id="searchSheet">
   <div class="top">
     <input id="searchInput" placeholder="脸红的关键词是什么？" autocomplete="off">
     <button class="cancel" id="closeSearch">取消</button>
   </div>
-  <div class="body">
-    <p class="stitle">搜索历史</p>
-    <div class="chips">
-      <span class="chip">雨声里的第三封信</span><span class="chip">夏日电车</span><span class="chip">Studio Cloud</span>
-    </div>
-    <p class="stitle" style="margin-top:20px">大家都在搜</p>
-    <div class="chips">
-      <span class="chip hot"><b>1</b>樱花色的谎言</span><span class="chip hot"><b>2</b>深夜图书馆</span>
-      <span class="chip hot"><b>3</b>月下的约定</span><span class="chip"># 高帧率</span><span class="chip"># 中文字幕</span>
-    </div>
-    <p class="stitle" style="margin-top:20px">猜你想看</p>
-    <div class="grid" id="gridSearch"></div>
-  </div>
+  <div class="body" id="searchBody"></div>
 </div>
 
-<!-- theme sheet -->
 <div class="scrim" id="scrim"></div>
 <div class="sheet" id="themeSheet">
-  <div class="handle"></div>
-  <h3>主题色</h3>
+  <div class="handle"></div><h3>主题色</h3>
   <div class="sheet-list" id="themeList"></div>
-  <div class="sheet-actions"><button id="closeTheme">取消</button></div>
+  <div class="sheet-actions"><button data-close>取消</button></div>
 </div>
-
-<!-- mode sheet -->
 <div class="sheet" id="modeSheet">
-  <div class="handle"></div>
-  <h3>深色主题</h3>
+  <div class="handle"></div><h3>深色主题</h3>
   <div class="sheet-list" id="modeList"></div>
-  <div class="sheet-actions"><button id="closeMode">取消</button></div>
+  <div class="sheet-actions"><button data-close>取消</button></div>
+</div>
+<div class="sheet" id="qualitySheet">
+  <div class="handle"></div><h3>默认画质</h3>
+  <div class="sheet-list" id="qualityList"></div>
+  <div class="sheet-actions"><button data-close>取消</button></div>
 </div>
 
-<!-- player -->
 <div class="player" id="player">
   <video id="video" playsinline webkit-playsinline controls preload="metadata"></video>
   <div class="bar">
-    <button id="closePlayer" aria-label="关闭">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg>
-    </button>
+    <button id="closePlayer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
     <div class="t" id="playerTitle">正在播放</div>
-    <button id="btnFullscreen" aria-label="全屏">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
-    </button>
+    <button id="btnFullscreen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
   </div>
-  <div class="hintbox">
-    演示视频加载失败<br>（网络受限时属正常现象）<br>真实视频请在 App 内播放
-  </div>
+  <div class="hintbox">演示视频加载失败<br>（网络受限属正常）<br>真实视频请在 App 内播放</div>
 </div>
+<div class="toast" id="toast"></div>
 
 <script>
+window.onerror = function (m, s, l, c) { document.title = 'ERR: ' + m + ' @' + l + ':' + c; return false; };
+/* ---------------- data ---------------- */
 const THEMES = [
-  {id:'system',  name:'跟随系统',    a:'#0A84FF', b:'#64B5FF', h:210},
-  {id:'red',     name:'姨妈红',      a:'#C7505B', b:'#EE9AA0', h:352},
-  {id:'blue',    name:'胖次蓝',      a:'#3C8FD8', b:'#8AC8F2', h:206},
-  {id:'green',   name:'早苗绿',      a:'#5E9A31', b:'#A8CE6E', h:96},
-  {id:'purple',  name:'基佬紫',      a:'#8B4FC9', b:'#C39BEA', h:276},
-  {id:'pink',    name:'少女粉',      a:'#E2608B', b:'#F3A7BE', h:340},
-  {id:'orange',  name:'橙留香',      a:'#E07A33', b:'#F5BA7A', h:24},
-  {id:'teal',    name:'初音蓝（绿）', a:'#0B7F74', b:'#6FBFA6', h:172},
-  {id:'egg',     name:'咸蛋黄',      a:'#C39A20', b:'#E8CF7A', h:44},
-  {id:'contrast',name:'高对比',      a:'#2B4BE8', b:'#7C93FF', h:230}
+  {id:'system',name:'跟随系统',a:'#0A84FF',b:'#64B5FF',h:210},
+  {id:'red',name:'姨妈红',a:'#C7505B',b:'#EE9AA0',h:352},
+  {id:'blue',name:'胖次蓝',a:'#3C8FD8',b:'#8AC8F2',h:206},
+  {id:'green',name:'早苗绿',a:'#5E9A31',b:'#A8CE6E',h:96},
+  {id:'purple',name:'基佬紫',a:'#8B4FC9',b:'#C39BEA',h:276},
+  {id:'pink',name:'少女粉',a:'#E2608B',b:'#F3A7BE',h:340},
+  {id:'orange',name:'橙留香',a:'#E07A33',b:'#F5BA7A',h:24},
+  {id:'teal',name:'初音蓝（绿）',a:'#0B7F74',b:'#6FBFA6',h:172},
+  {id:'egg',name:'咸蛋黄',a:'#C39A20',b:'#E8CF7A',h:44},
+  {id:'contrast',name:'高对比',a:'#2B4BE8',b:'#7C93FF',h:230}
 ];
-
-const HEROES = [
-  {t:'雨声里的第三封信', s:'Studio Cloud', v:'23.3 万次观看', d:'2 个月前', o1:10, o2:-40},
-  {t:'夏日最後一班電車', s:'Aozora Works', v:'55.5 万次观看', d:'1 个月前', o1:-26, o2:34},
-  {t:'月光下的舊書店',   s:'Yoru Studio',  v:'12.8 万次观看', d:'3 週前',  o1:44, o2:8},
-  {t:'冬日陽台的約定',   s:'Kohaku Lab',   v:'8.4 万次观看',  d:'5 天前',  o1:-52, o2:-8}
-];
-
-const CARDS = {
-  grid1:[
-    {t:'雨声里的第三封信 · 上', v:'30.6 万', o1:8,  o2:-34},
-    {t:'夏夜的螢火蟲',          v:'437.1 万', o1:-40, o2:22},
-    {t:'圖書館的午後',          v:'12.4 万', o1:52,  o2:14},
-    {t:'天台上的告白',          v:'8.9 万',  o1:-18, o2:40},
-    {t:'轉角遇到妳',            v:'21.7 万', o1:30,  o2:-12}
-  ],
-  grid2:[
-    {t:'青空 -Wuthering-',  v:'3 万',   o1:-30, o2:16},
-    {t:'Aeon ✧ Aha',        v:'2.7 万', o1:38,  o2:-26},
-    {t:'白晝的流星',        v:'5.6 万', o1:-8,  o2:44},
-    {t:'薄暮的迴響',        v:'1.9 万', o1:20,  o2:-48},
-    {t:'海邊的舊唱片',      v:'4.2 万', o1:-44, o2:6}
-  ],
-  grid3:[
-    {t:'雪融化的聲音',      v:'1.1 万', o1:26,  o2:-20},
-    {t:'放學後的值日生',    v:'6.8 万', o1:-36, o2:30},
-    {t:'貓與薄荷',          v:'3.4 万', o1:46,  o2:-40},
-    {t:'第七號月台',        v:'2.2 万', o1:-14, o2:18},
-    {t:'風鈴與玻璃',        v:'9.7 万', o1:34,  o2:-6}
-  ],
-  grid4:[
-    {t:'雨声里的第三封信 · 上', v:'30.6 万', o1:8,  o2:-34},
-    {t:'雪融化的聲音',      v:'1.1 万', o1:26,  o2:-20},
-    {t:'青空 -Wuthering-',  v:'3 万',   o1:-30, o2:16}
-  ]
+const TAGS = ['純愛','巨乳','後宮','校園','偶像','NTR','中文字幕','高畫質','單集','系列'];
+const STUDIOS = ['Studio Cloud','Aozora Works','Yoru Studio','Kohaku Lab','Pink Note','Moonlit','Nagi Soft'];
+const VIDEOS = [
+  {t:'雨声里的第三封信',o1:10,o2:-40,dur:'24:10',code:'H1M-001'},
+  {t:'夏夜的螢火蟲',o1:-40,o2:22,dur:'22:36',code:'H1M-002'},
+  {t:'圖書館的午後',o1:52,o2:14,dur:'26:02',code:'H1M-003'},
+  {t:'天台上的告白',o1:-18,o2:40,dur:'19:48',code:'H1M-004'},
+  {t:'轉角遇到妳',o1:30,o2:-12,dur:'23:15',code:'H1M-005'},
+  {t:'青空 -Wuthering-',o1:-30,o2:16,dur:'28:40',code:'H1M-006'},
+  {t:'Aeon ✧ Aha',o1:38,o2:-26,dur:'21:07',code:'H1M-007'},
+  {t:'白晝的流星',o1:-8,o2:44,dur:'25:33',code:'H1M-008'},
+  {t:'薄暮的迴響',o1:20,o2:-48,dur:'20:19',code:'H1M-009'},
+  {t:'海邊的舊唱片',o1:-44,o2:6,dur:'27:12',code:'H1M-010'},
+  {t:'雪融化的聲音',o1:26,o2:-20,dur:'18:55',code:'H1M-011'},
+  {t:'放學後的值日生',o1:-36,o2:30,dur:'24:44',code:'H1M-012'},
+  {t:'貓與薄荷',o1:46,o2:-40,dur:'22:08',code:'H1M-013'},
+  {t:'第七號月台',o1:-14,o2:18,dur:'29:01',code:'H1M-014'},
+  {t:'風鈴與玻璃',o1:34,o2:-6,dur:'23:59',code:'H1M-015'}
+].map((v,i) => Object.assign(v, {
+  id: 'v' + (i + 1),
+  studio: STUDIOS[i % STUDIOS.length],
+  views: ['23.3 万','437.1 万','12.4 万','8.9 万','21.7 万','3 万','2.7 万','5.6 万','1.9 万','4.2 万','1.1 万','6.8 万','3.4 万','2.2 万','9.7 万'][i],
+  date: ['2 个月前','3 天前','1 週前','5 天前','2 週前','1 個月前','4 天前','3 週前','6 天前','2 個月前','1 天前','2 週前','5 週前','昨天','今天'][i],
+  tags: [TAGS[i % TAGS.length], TAGS[(i + 3) % TAGS.length], '中文字幕'],
+  desc: '這是一段示例簡介。真實內容由站點解析後填入，包含劇情概要、社團資訊與分集清單。目前網頁版使用示範資料，用於確認版面與互動流程。'
+}));
+const byId = id => VIDEOS.find(v => v.id === id);
+const SECTIONS = {
+  new: {title:'最新里番', ids:['v1','v2','v3','v4','v5']},
+  release: {title:'最新上市', ids:['v6','v7','v8','v9','v10']},
+  upload: {title:'最新上傳', ids:['v11','v12','v13','v14','v15']},
+  hot: {title:'本週熱榜', ids:['v2','v7','v1','v12','v6']}
+};
+const LIBRARY = {
+  later: {title:'稍後觀看', ids:['v1','v6','v12']},
+  fav: {title:'喜歡的影片', ids:['v2','v5','v8','v13']},
+  history: {title:'觀看歷史', ids:['v3','v9','v14','v1']},
+  download: {title:'下載', ids:['v4']},
+  playlist: {title:'播放清單', ids:['v1','v2','v3']}
 };
 
+/* ---------------- state ---------------- */
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
-const state = { theme:'teal', mode:'light', page:'home' };
-
-function poster(o1,o2){
-  return `<div class="poster" style="--o:${o1};--o2:${o2}"><i class="a"></i><i class="b"></i><div class="c"></div><div class="v"></div></div>`;
+const state = {
+  theme:'teal', mode:'light', quality:'1080P',
+  tab:'home', stack:[{name:'home'}],
+  likes:new Set(), later:new Set()
+};
+const toastEl = $('#toast');
+let toastTimer;
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('on'), 1500);
 }
-function card(it){
-  return `<article class="card" data-title="${it.t}">
-    <div class="thumb">${poster(it.o1,it.o2)}
-      <div class="pill"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>1080P</div>
-    </div>
-    <h4>${it.t}</h4>
-    <div class="m">${it.v}次观看<span class="dotsep"></span>1080P</div>
-  </article>`;
-}
-Object.entries(CARDS).forEach(([id, list]) => {
-  const el = document.getElementById(id);
-  if (el) el.innerHTML = list.map(card).join('');
-});
 
-/* theme */
+/* ---------------- theme ---------------- */
 function applyTheme(){
   const t = THEMES.find(x => x.id === state.theme) || THEMES[0];
   document.documentElement.style.setProperty('--accent-base', t.a);
@@ -622,53 +420,336 @@ function applyTheme(){
   document.documentElement.style.setProperty('--tb', t.h);
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute('content', t.a);
-  $('#valTheme').textContent = t.name;
   $$('.th-item[data-theme]').forEach(el => el.classList.toggle('on', el.dataset.theme === state.theme));
 }
 function applyMode(){
   document.documentElement.setAttribute('data-mode', state.mode);
-  $('#valMode').textContent = state.mode === 'dark' ? '深色' : '浅色';
   $$('.th-item[data-mode]').forEach(el => el.classList.toggle('on', el.dataset.mode === state.mode));
 }
-
-/* theme list */
 $('#themeList').innerHTML = THEMES.map(t => `
   <div class="th-item" data-theme="${t.id}" style="--c:${t.a}">
     <span class="dot"></span><span class="nm">${t.name}</span>
     <span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m4 12.5 5 5L20 6.5"/></svg></span>
   </div>`).join('');
-
-$('#modeList').innerHTML = [
-  {id:'light', name:'浅色'},
-  {id:'dark',  name:'深色'}
-].map(m => `
+$('#modeList').innerHTML = [{id:'light',n:'淺色'},{id:'dark',n:'深色'}].map(m => `
   <div class="th-item" data-mode="${m.id}" style="--c:var(--accent)">
-    <span class="nm">${m.name}</span>
+    <span class="nm">${m.n}</span>
+    <span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m4 12.5 5 5L20 6.5"/></svg></span>
+  </div>`).join('');
+$('#qualityList').innerHTML = ['1080P','720P','480P','自動'].map(q => `
+  <div class="th-item" data-quality="${q}" style="--c:var(--accent)">
+    <span class="nm">${q}</span>
     <span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="m4 12.5 5 5L20 6.5"/></svg></span>
   </div>`).join('');
 
-$$('.th-item[data-theme]').forEach(el => el.onclick = () => { state.theme = el.dataset.theme; applyTheme(); });
-$$('.th-item[data-mode]').forEach(el => el.onclick = () => { state.mode = el.dataset.mode; applyMode(); });
+document.addEventListener('click', e => {
+  const th = e.target.closest('.th-item[data-theme]');
+  if (th) { state.theme = th.dataset.theme; applyTheme(); return; }
+  const mo = e.target.closest('.th-item[data-mode]');
+  if (mo) { state.mode = mo.dataset.mode; applyMode(); return; }
+  const qu = e.target.closest('.th-item[data-quality]');
+  if (qu) {
+    state.quality = qu.dataset.quality;
+    $$('.th-item[data-quality]').forEach(el => el.classList.toggle('on', el.dataset.quality === state.quality));
+    const v = document.querySelector('[data-val="quality"]');
+    if (v) v.textContent = state.quality;
+    toast('畫質已設為 ' + state.quality);
+    return;
+  }
+  if (e.target.closest('[data-close]')) { closeSheets(); }
+});
 
-/* sheets */
-function openTheme(){ $('#scrim').classList.add('on'); $('#themeSheet').classList.add('on'); }
-function closeTheme(){ $('#scrim').classList.remove('on'); $('#themeSheet').classList.remove('on'); $('#modeSheet').classList.remove('on'); }
-$('#btnTheme').onclick = openTheme;
-$('#rowTheme').onclick = openTheme;
-$('#closeTheme').onclick = closeTheme;
-$('#scrim').onclick = closeTheme;
-$('#rowMode').onclick = () => { $('#scrim').classList.add('on'); $('#modeSheet').classList.add('on'); };
-$('#closeMode').onclick = closeTheme;
+function openSheet(id){
+  $('#scrim').classList.add('on');
+  document.querySelectorAll('.sheet').forEach(s => s.classList.remove('on'));
+  $(id).classList.add('on');
+}
+function closeSheets(){
+  $('#scrim').classList.remove('on');
+  document.querySelectorAll('.sheet').forEach(s => s.classList.remove('on'));
+}
+$('#scrim').onclick = closeSheets;
 
-/* navigation */
-const TAB_ORDER = ['home','following','mine'];
-function go(page){
-  state.page = page;
-  $$('.page').forEach(p => p.classList.toggle('active', p.dataset.page === page));
-  $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === page));
-  const idx = TAB_ORDER.indexOf(page);
-  if (idx >= 0) { movePill(idx); $('#tabpill').style.opacity = 1; }
-  else $('#tabpill').style.opacity = 0;
+/* ---------------- router ---------------- */
+function current(){ return state.stack[state.stack.length - 1]; }
+function push(view){ state.stack.push(view); render(); }
+function back(){
+  if (state.stack.length > 1) { state.stack.pop(); render(); }
+}
+function goTab(tab){
+  state.tab = tab;
+  state.stack = [{name:tab}];
+  render();
+}
+
+/* ---------------- top bar ---------------- */
+const ICONS = {
+  back:'<path d="M19 12H5"/><path d="m11 6-6 6 6 6"/>',
+  search:'<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/>',
+  palette:'<circle cx="12" cy="12" r="8.5"/><circle cx="9.2" cy="9.8" r="1.15" fill="currentColor" stroke="none"/><circle cx="14.8" cy="9.8" r="1.15" fill="currentColor" stroke="none"/><circle cx="9.2" cy="14.6" r="1.15" fill="currentColor" stroke="none"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  more:'<circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none"/>',
+  share:'<path d="M12 15V4"/><path d="m8 8 4-4 4 4"/><path d="M5 15v4h14v-4"/>',
+  play:'<path d="M8 5.5v13l11-6.5z" fill="currentColor" stroke="none"/>',
+  clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  heart:'<path d="M12 20s-7.5-4.6-7.5-9.6A4.4 4.4 0 0 1 12 7a4.4 4.4 0 0 1 7.5 3.4C19.5 15.4 12 20 12 20z"/>',
+  download:'<path d="M12 4v9"/><path d="m8.5 9.5 3.5 3.5 3.5-3.5"/><path d="M5 17v2.5h14V17"/>',
+  list:'<path d="M4 7h11M4 12h11M4 17h7"/><path d="m18 9 3 3-3 3"/>',
+  globe:'<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.6 2.5 14.4 0 17"/>',
+  info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5"/><circle cx="12" cy="7.8" r="1" fill="currentColor" stroke="none"/>',
+  star:'<path d="M12 3.5 14.6 9l6 .9-4.3 4.2 1 6-5.3-2.8L6.7 20l1-6L3.4 9.9l6-.9z"/>',
+  chat:'<path d="M4 5h16v11H8l-4 4z"/>',
+  moon:'<path d="M20 13.5A8.5 8.5 0 0 1 10.5 4a8.5 8.5 0 1 0 9.5 9.5z"/>',
+  monitor:'<rect x="3" y="5" width="18" height="13" rx="2.5"/><path d="M9 21h6"/>',
+  speaker:'<path d="M11 5 6.5 9H3v6h3.5L11 19z"/><path d="M15.5 9a4 4 0 0 1 0 6"/>'
+};
+function ic(name, size){
+  return `<svg viewBox="0 0 24 24" width="${size||18}" height="${size||18}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[name]||''}</svg>`;
+}
+
+function renderTopbar(){
+  const v = current();
+  const root = v.name === 'home' || v.name === 'following' || v.name === 'mine';
+  const bar = $('#topbar');
+  if (root){
+    bar.innerHTML = `
+      <div class="brand">H</div>
+      <div class="searchfield" id="openSearch">
+        ${ic('search',17)}
+        <div class="hint" id="hint">
+          <span class="on">搜索影片、标签或作者</span>
+          <span>脸红的关键词是什么？</span>
+          <span>探索深处的秘密…</span>
+        </div>
+      </div>
+      <button class="iconbtn" id="btnTheme" aria-label="主题">${ic('palette',20)}</button>
+      <button class="iconbtn" id="btnSettings" aria-label="设置">${ic('gear',20)}</button>`;
+    $('#openSearch').onclick = openSearch;
+    $('#btnTheme').onclick = () => openSheet('#themeSheet');
+    $('#btnSettings').onclick = () => push({name:'settings', title:'設定'});
+  } else {
+    const title = v.title || ({section:'列表', detail:'詳情', library:'清單', settings:'設定', about:'關於', network:'網路設定', language:'語言'}[(v.name)] || '');
+    bar.innerHTML = `
+      <button class="iconbtn" id="btnBack" aria-label="返回">${ic('back',20)}</button>
+      <div class="tbtitle">${title}</div>
+      ${v.name === 'detail' ? `<button class="iconbtn" id="btnMore" aria-label="更多">${ic('more',20)}</button>` : ''}`;
+    $('#btnBack').onclick = back;
+    if ($('#btnMore')) $('#btnMore').onclick = () => toast('更多選項：收藏 / 下載 / 分享');
+  }
+}
+
+/* ---------------- shared pieces ---------------- */
+function poster(o1,o2){
+  return `<div class="poster" style="--o:${o1};--o2:${o2}"><i class="a"></i><i class="b"></i><div class="c"></div><div class="v"></div></div>`;
+}
+function cardHTML(v){
+  return `<article class="card" data-id="${v.id}">
+    <div class="thumb">${poster(v.o1,v.o2)}
+      <div class="pill">${ic('play',9)}${v.dur}</div>
+    </div>
+    <h4>${v.t}</h4>
+    <div class="m">${v.views}次觀看<span class="dotsep"></span>${v.date}</div>
+  </article>`;
+}
+function gridHTML(ids){ return ids.map(id => cardHTML(byId(id))).filter(Boolean).join(''); }
+function rowHTML(icon,title,desc,value,action,extra){
+  return `<div class="row" ${action ? `data-act="${action}"` : ''} ${extra||''}>
+    <span class="ric">${ic(icon)}</span>
+    <div class="tx"><div class="t">${title}</div>${desc ? `<div class="d">${desc}</div>` : ''}</div>
+    ${value ? `<span class="val">${value}</span>` : ''}
+    <span class="chev">${ic('back',15).replace('M19 12H5M11 6l-6 6 6 6','m9 5 7 7-7 7')}</span>
+  </div>`;
+}
+function chev(){ return `<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="m9 5 7 7-7 7"/></svg>`; }
+function row(icon,title,desc,value,act,data){
+  return `<div class="row" data-act="${act||''}" ${data||''}>
+    <span class="ric">${ic(icon)}</span>
+    <div class="tx"><div class="t">${title}</div>${desc?`<div class="d">${desc}</div>`:''}</div>
+    ${value?`<span class="val">${value}</span>`:''}
+    <span class="chev">${chev()}</span></div>`;
+}
+
+/* ---------------- views ---------------- */
+function viewHome(){
+  const hero = VIDEOS[0];
+  return `<div class="page"><div class="content">
+    <div class="hero" data-id="${hero.id}">
+      ${poster(10,-40)}<div class="scrim"></div>
+      <div class="meta">
+        <span class="badge">本週精選</span>
+        <h2>${hero.t}</h2>
+        <div class="sub"><span>${hero.studio}</span><span class="dotsep"></span><span>${hero.views}次觀看</span><span class="dotsep"></span><span>${hero.date}</span></div>
+      </div>
+      <div class="playbig">${ic('play',20)}</div>
+    </div>
+    <div class="notice" data-open="about">
+      <span class="ic">${ic('chat',16)}</span>
+      <div style="flex:1;min-width:0"><b>公告列表</b><p>Han1meNext 2.0 · 全新 iPadOS 液態玻璃介面</p></div>
+      <span class="chev">${chev()}</span>
+    </div>
+    ${['new','release','upload','hot'].map(key => {
+      const s = SECTIONS[key];
+      return `<div class="sec">
+        <div class="sec-head"><span class="bar"></span><h3>${s.title}</h3><span class="sp"></span>
+          <button class="more" data-section="${key}">更多 ${chev()}</button>
+        </div>
+        <div class="grid">${gridHTML(s.ids)}</div>
+      </div>`;
+    }).join('')}
+  </div></div>`;
+}
+
+function viewSection(key){
+  const s = SECTIONS[key] || {title:'列表', ids:[]};
+  return `<div class="page"><div class="content">
+    <div class="group-title"><span class="bar"></span><h3>${s.title}</h3></div>
+    <div class="grid">${gridHTML(s.ids)}</div>
+  </div></div>`;
+}
+
+function viewDetail(id){
+  const v = byId(id) || VIDEOS[0];
+  const liked = state.likes.has(v.id);
+  const later = state.later.has(v.id);
+  const related = VIDEOS.filter(x => x.id !== v.id).slice(0, 5).map(x => x.id);
+  return `<div class="page"><div class="content">
+    <div class="detail-hero">
+      ${poster(v.o1,v.o2)}<div class="scrim"></div>
+      <div class="play" data-play="${v.id}">${ic('play',24)}</div>
+    </div>
+    <h1 class="dtitle">${v.t}</h1>
+    <div class="dmeta"><span>${v.studio}</span><span class="dotsep"></span><span>${v.views}次觀看</span><span class="dotsep"></span><span>${v.date}</span><span class="dotsep"></span><span>${v.dur}</span></div>
+    <div class="actions">
+      <button class="act primary" data-play="${v.id}">${ic('play',19)}播放</button>
+      <button class="act ${liked?'on':''}" data-like="${v.id}">${ic('heart',19)}${liked?'已喜歡':'喜歡'}</button>
+      <button class="act ${later?'on':''}" data-later="${v.id}">${ic('clock',19)}${later?'已加入':'稍後'}</button>
+      <button class="act" data-download="${v.id}">${ic('download',19)}下載</button>
+    </div>
+    <div class="tags">${v.tags.map(t => `<span class="tag" data-tag="${t}">${t}</span>`).join('')}</div>
+    <div class="desc"><b>簡介</b><br>${v.desc}</div>
+    <div class="sec">
+      <div class="sec-head"><span class="bar"></span><h3>相關影片</h3></div>
+      <div class="grid">${gridHTML(related)}</div>
+    </div>
+  </div></div>`;
+}
+
+function viewFollowing(){
+  return `<div class="page"><div class="content">
+    <div class="group-title"><span class="bar"></span><h3>關注</h3></div>
+    <div class="group">
+      ${row('star','追番提醒','3 個社團 · 本週 2 部更新','3','section:hot')}
+      ${row('chat','訂閱動態','關注的作者有新作時出現在這裡','','section:new')}
+      ${row('heart','我的訂閱',''  ,'6','section:release')}
+    </div>
+    <div class="group-title"><span class="bar"></span><h3>最近更新</h3></div>
+    <div class="grid">${gridHTML(['v1','v11','v6','v14'])}</div>
+  </div></div>`;
+}
+
+function viewMine(){
+  return `<div class="page"><div class="content">
+    <div class="profile">
+      <div class="av">羽</div>
+      <div class="info" style="flex:1"><h2>羽</h2><div class="sub">已陪伴 128 天 · 稍後觀看 ${state.later.size + 3}</div></div>
+    </div>
+    <div class="group-title"><span class="bar"></span><h3>我的清單</h3></div>
+    <div class="group">
+      ${row('clock','稍後觀看','',String(state.later.size + 3),'library:later')}
+      ${row('heart','喜歡的影片','',String(state.likes.size + 128),'library:fav')}
+      ${row('list','播放清單','自建的 3 個合集','','library:playlist')}
+    </div>
+    <div class="group-title"><span class="bar"></span><h3>影片</h3></div>
+    <div class="group">
+      ${row('clock','觀看歷史','共 214 條','','library:history')}
+      ${row('download','下載','離線快取 · 已用 1.2 GB','','library:download')}
+      ${row('gear','設定','主題色、播放、網路','','settings')}
+    </div>
+  </div></div>`;
+}
+
+function viewLibrary(key){
+  const lib = LIBRARY[key] || {title:'清單', ids:[]};
+  const ids = key === 'later' && state.later.size ? [...state.later] : lib.ids;
+  return `<div class="page"><div class="content">
+    ${ids.length ? `<div class="grid">${gridHTML(ids)}</div>` : `<div class="empty">這裡還是空的</div>`}
+  </div></div>`;
+}
+
+function viewSettings(){
+  return `<div class="page"><div class="content">
+    <div class="group-title"><span class="bar"></span><h3>主題</h3></div>
+    <div class="group">
+      ${row('moon','深色主題','',state.mode === 'dark' ? '深色' : '淺色','mode')}
+      ${row('palette','主題色','十套配色，和安卓版一一對應',THEMES.find(t => t.id === state.theme).name,'theme')}
+    </div>
+    <div class="group-title"><span class="bar"></span><h3>播放</h3></div>
+    <div class="group">
+      ${row('monitor','預設畫質','',state.quality,'quality')}
+      ${row('monitor','畫中畫','退出 App 後繼續小窗播放','開啟','toast:pip')}
+      ${row('speaker','後台播放','','開啟','toast:bg')}
+    </div>
+    <div class="group-title"><span class="bar"></span><h3>網路</h3></div>
+    <div class="group">
+      ${row('globe','網路設定','走系統代理，App 不內建','','network')}
+    </div>
+    <div class="group-title"><span class="bar"></span><h3>關於</h3></div>
+    <div class="group">
+      ${row('info','關於','Han1meNext · 網頁預覽版','2.0.24','about')}
+    </div>
+  </div></div>`;
+}
+
+function viewAbout(){
+  return `<div class="page"><div class="content">
+    <div class="group-title"><span class="bar"></span><h3>Han1meNext</h3></div>
+    <div class="desc">
+      網頁預覽版 · v2.0.24<br><br>
+      這個頁面用於確認 iPad 上的版面、配色、液態玻璃層次與操作流程，
+      <b>不含真實內容</b>。封面是抽象佔位圖，資料是示範資料。<br><br>
+      真正的 App（播放、登入、下載、評論、收藏）在 IPA 裡。
+    </div>
+    <div class="group-title"><span class="bar"></span><h3>公告</h3></div>
+    <div class="group">${row('chat','公告列表','3 條未讀','','toast:notice')}</div>
+  </div></div>`;
+}
+
+function viewNetwork(){
+  return `<div class="page"><div class="content">
+    <div class="desc">
+      本 App 不內建代理。所有請求走 iPad 的系統網路（VPN / 代理）。<br><br>
+      若出現「當前網路已被站點封鎖」，請先確認代理是否開啟。
+    </div>
+  </div></div>`;
+}
+
+/* ---------------- render ---------------- */
+function render(){
+  const v = current();
+  let html = '';
+  switch (v.name){
+    case 'home': html = viewHome(); break;
+    case 'following': html = viewFollowing(); break;
+    case 'mine': html = viewMine(); break;
+    case 'settings': html = viewSettings(); break;
+    case 'section': html = viewSection(v.key); break;
+    case 'detail': html = viewDetail(v.id); break;
+    case 'library': html = viewLibrary(v.key); break;
+    case 'about': html = viewAbout(); break;
+    case 'network': html = viewNetwork(); break;
+    default: html = viewHome();
+  }
+  $('#view').innerHTML = html;
+  renderTopbar();
+
+  const root = ['home','following','mine'].includes(v.name);
+  $('#tabbar').classList.toggle('hidden', !root);
+  $$('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === v.name));
+  if (root){
+    const idx = ['home','following','mine'].indexOf(v.name);
+    movePill(idx);
+    $('#tabpill').style.opacity = 1;
+  }
   $('#main').scrollTop = 0;
 }
 function movePill(i){
@@ -678,18 +759,144 @@ function movePill(i){
   pill.style.left = t.offsetLeft + 'px';
   pill.style.width = t.offsetWidth + 'px';
 }
-$$('.tab').forEach(t => t.onclick = () => go(t.dataset.tab));
-$('#btnSettings').onclick = () => go('settings');
-$('#rowSettings2').onclick = () => go('settings');
 
-/* search */
-$('#openSearch').onclick = () => {
+/* ---------------- interactions ---------------- */
+$('#tabbar').addEventListener('click', e => {
+  const t = e.target.closest('.tab');
+  if (t) goTab(t.dataset.tab);
+});
+
+document.addEventListener('click', e => {
+  const card = e.target.closest('.card, .hero, .detail-hero');
+  if (card && card.dataset.id){
+    const v = byId(card.dataset.id);
+    if (v) push({name:'detail', id:v.id, title:v.t});
+    return;
+  }
+  const more = e.target.closest('[data-section]');
+  if (more){
+    const key = more.dataset.section;
+    push({name:'section', key, title:SECTIONS[key].title});
+    return;
+  }
+  const play = e.target.closest('[data-play]');
+  if (play){ openPlayer(byId(play.dataset.play)); return; }
+  const like = e.target.closest('[data-like]');
+  if (like){
+    const id = like.dataset.like;
+    if (state.likes.has(id)) { state.likes.delete(id); toast('已取消喜歡'); }
+    else { state.likes.add(id); toast('已加入喜歡'); }
+    render();
+    return;
+  }
+  const later = e.target.closest('[data-later]');
+  if (later){
+    const id = later.dataset.later;
+    if (state.later.has(id)) { state.later.delete(id); toast('已移出稍後觀看'); }
+    else { state.later.add(id); toast('已加入稍後觀看'); }
+    render();
+    return;
+  }
+  const dl = e.target.closest('[data-download]');
+  if (dl){ toast('已加入下載佇列（示範）'); return; }
+  const tag = e.target.closest('[data-tag]');
+  if (tag){ toast('依標籤「' + tag.dataset.tag + '」篩選（示範）'); return; }
+
+  const act = e.target.closest('[data-act]');
+  if (act){
+    const a = act.dataset.act;
+    if (!a) return;
+    if (a === 'settings') { push({name:'settings', title:'設定'}); return; }
+    if (a.startsWith('library:')) { const k = a.split(':')[1]; push({name:'library', key:k, title:LIBRARY[k].title}); return; }
+    if (a.startsWith('section:')) { const k = a.split(':')[1]; push({name:'section', key:k, title:SECTIONS[k].title}); return; }
+    if (a === 'theme') { openSheet('#themeSheet'); return; }
+    if (a === 'mode') { openSheet('#modeSheet'); return; }
+    if (a === 'quality') { openSheet('#qualitySheet'); return; }
+    if (a === 'network') { push({name:'network', title:'網路設定'}); return; }
+    if (a === 'about') { push({name:'about', title:'關於'}); return; }
+    if (a.startsWith('toast:')) { toast('這是示範項，App 內可用'); return; }
+  }
+  const open = e.target.closest('[data-open]');
+  if (open){ push({name:open.dataset.open, title:'公告'}); }
+});
+
+/* ---------------- search ---------------- */
+function openSearch(){
+  const body = $('#searchBody');
+  body.innerHTML = `
+    <p class="stitle">搜尋歷史</p>
+    <div class="chips">
+      <span class="chip" data-kw="雨声里的第三封信">雨声里的第三封信</span>
+      <span class="chip" data-kw="夏日電車">夏日電車</span>
+      <span class="chip" data-kw="Studio Cloud">Studio Cloud</span>
+    </div>
+    <p class="stitle" style="margin-top:20px">大家都在搜</p>
+    <div class="chips">
+      <span class="chip hot" data-kw="櫻花"><b>1</b>櫻花色的謊言</span>
+      <span class="chip hot" data-kw="圖書館"><b>2</b>深夜圖書館</span>
+      <span class="chip hot" data-kw="月下"><b>3</b>月下的約定</span>
+      <span class="chip" data-kw="高幀率"># 高幀率</span>
+      <span class="chip" data-kw="中文字幕"># 中文字幕</span>
+    </div>
+    <p class="stitle" style="margin-top:20px">猜你想看</p>
+    <div class="grid">${gridHTML(['v1','v2','v5','v8'])}</div>`;
   $('#searchSheet').classList.add('on');
   setTimeout(() => $('#searchInput').focus(), 120);
-};
+}
 $('#closeSearch').onclick = () => $('#searchSheet').classList.remove('on');
+$('#searchSheet').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (chip){
+    $('#searchInput').value = chip.dataset.kw;
+    $('#searchSheet').classList.remove('on');
+    toast('搜尋「' + chip.dataset.kw + '」（示範）');
+    return;
+  }
+  const card = e.target.closest('.card');
+  if (card && card.dataset.id){
+    const v = byId(card.dataset.id);
+    $('#searchSheet').classList.remove('on');
+    if (v) push({name:'detail', id:v.id, title:v.t});
+  }
+});
 
-/* rotating hints */
+/* ---------------- player ---------------- */
+const VIDEOS_SRC = [
+  'https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8',
+  'https://media.w3.org/2010/05/sintel/trailer.mp4'
+];
+function openPlayer(v){
+  if (!v) return;
+  const el = $('#video');
+  $('#playerTitle').textContent = v.t;
+  $('#player').classList.add('on');
+  $('#player').classList.remove('errored');
+  if (!el.dataset.ready){
+    VIDEOS_SRC.forEach((src, i) => {
+      const s = document.createElement('source');
+      s.src = src;
+      s.type = i === 0 ? 'application/x-mpegURL' : 'video/mp4';
+      el.appendChild(s);
+    });
+    el.dataset.ready = '1';
+    el.load();
+  }
+  el.play().catch(() => {});
+}
+function closePlayer(){ const el = $('#video'); el.pause(); $('#player').classList.remove('on'); }
+$('#closePlayer').onclick = closePlayer;
+$('#btnFullscreen').onclick = () => {
+  const el = $('#video');
+  if (el.webkitEnterFullscreen) el.webkitEnterFullscreen();
+  else if (el.requestFullscreen) el.requestFullscreen();
+};
+$('#video').addEventListener('error', () => $('#player').classList.add('errored'));
+setTimeout(() => {
+  const el = $('#video');
+  if (el && el.readyState === 0 && $('#player').classList.contains('on')) $('#player').classList.add('errored');
+}, 7000);
+
+/* ---------------- misc ---------------- */
 let hi = 0;
 setInterval(() => {
   const spans = $$('#hint span');
@@ -698,78 +905,22 @@ setInterval(() => {
   hi = (hi + 1) % spans.length;
   spans[hi].classList.add('on');
 }, 3400);
-
-/* hero carousel */
-let heroI = 0;
-setInterval(() => {
-  heroI = (heroI + 1) % HEROES.length;
-  const h = HEROES[heroI];
-  const p = $('#hero .poster');
-  if (!p) return;
-  p.style.setProperty('--o', h.o1);
-  p.style.setProperty('--o2', h.o2);
-  $('#heroTitle').textContent = h.t;
-  $('#heroStudio').textContent = h.s;
-  $('#heroViews').textContent = h.v;
-  $('#heroTime').textContent = h.d;
-}, 5200);
-
-/* player */
-const VIDEOS = [
-  'https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_ts/master.m3u8',
-  'https://media.w3.org/2010/05/sintel/trailer.mp4'
-];
-function openPlayer(title){
-  const v = $('#video');
-  $('#playerTitle').textContent = title || '正在播放';
-  $('#player').classList.add('on');
-  $('#player').classList.remove('errored');
-  if (!v.getAttribute('src') && !v.querySelector('source')){
-    VIDEOS.forEach((src, i) => {
-      const s = document.createElement('source');
-      s.src = src;
-      s.type = i === 0 ? 'application/x-mpegURL' : 'video/mp4';
-      v.appendChild(s);
-    });
-    v.load();
-  }
-  v.play().catch(() => {});
-}
-function closePlayer(){
-  const v = $('#video');
-  v.pause();
-  $('#player').classList.remove('on');
-}
-document.addEventListener('click', e => {
-  const c = e.target.closest('.card');
-  if (c) openPlayer(c.dataset.title);
-  const h = e.target.closest('.hero');
-  if (h) openPlayer($('#heroTitle').textContent);
+addEventListener('resize', () => {
+  const v = current();
+  const idx = ['home','following','mine'].indexOf(v.name);
+  if (idx >= 0) movePill(idx);
 });
-$('#closePlayer').onclick = closePlayer;
-$('#btnFullscreen').onclick = () => {
-  const v = $('#video');
-  if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
-  else if (v.requestFullscreen) v.requestFullscreen();
-};
-$('#video').addEventListener('error', () => $('#player').classList.add('errored'));
-$('#video').addEventListener('stalled', () => {});
-setTimeout(() => {
-  const v = $('#video');
-  if (v && v.readyState === 0 && $('#player').classList.contains('on')) $('#player').classList.add('errored');
-}, 6000);
 
-/* keep the pill aligned on rotate */
-addEventListener('resize', () => movePill(TAB_ORDER.indexOf(state.page)));
-addEventListener('orientationchange', () => setTimeout(() => movePill(TAB_ORDER.indexOf(state.page)), 260));
-
-/* init */
-(function init(){
+/* boot */
+(function boot(){
   const p = new URLSearchParams(location.search);
   if (p.get('theme')) state.theme = p.get('theme');
   if (p.get('mode')) state.mode = p.get('mode');
-  applyTheme(); applyMode(); go('home');
-  if (p.get('open') === 'theme') setTimeout(() => { go('settings'); openTheme(); }, 200);
+  applyTheme(); applyMode();
+  $$('.th-item[data-quality]').forEach(el => el.classList.toggle('on', el.dataset.quality === state.quality));
+  render();
+  if (p.get('view') === 'detail') { const id = p.get('id') || 'v3'; const v = byId(id); if (v) push({name:'detail', id, title:v.t}); }
+  if (p.get('view') === 'settings') push({name:'settings', title:'設定'});
   requestAnimationFrame(() => movePill(0));
   setTimeout(() => movePill(0), 200);
 })();
